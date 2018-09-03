@@ -23,6 +23,9 @@
 </template>
 
 <script>
+// 引入 api 登陆的index.js
+import {login} from '@/api/index.js'
+
 export default {
   data () {
     return {
@@ -49,6 +52,23 @@ export default {
       this.$refs[formname].validate((valid) => {
         if (valid) {
           console.log('可以去进行接口的请求的啦')
+          login(this.loginForm).then((res) => {
+            console.log(res)
+            if (res.meta.status === 200) {
+              // 给出提示信息
+              this.$message({
+                message: res.meta.msg,
+                type: 'success'
+              })
+              // 路由跳转
+              this.$router.push({name: 'Home'})
+            } else {
+              this.$message({
+                message: res.meta.msg,
+                type: 'error'
+              })
+            }
+          })
         } else {
           return false
         }
