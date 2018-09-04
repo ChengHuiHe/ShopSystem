@@ -60,7 +60,7 @@ export default {
                 message: res.meta.msg,
                 type: 'success'
               })
-              // 获取token
+              // 获取 -- 设置token
               localStorage.setItem('mytoken', res.data.token)
               // 路由跳转 this.$router.push({name:'路由名'})
               this.$router.push({name: 'Home'})
