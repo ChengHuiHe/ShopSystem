@@ -9,6 +9,15 @@ import Home from '../views/Home.vue'
 Vue.use(Router)
 
 export default new Router({
+  // 路由懒加载
+  // {
+  //   path: '/development',
+  //   name: 'development',
+  //   component: (resolve) => {
+  //       require(['../views/development.vue'], resolve)
+  //   }
+  // },
+
   routes: [
     {
       path: '/',

@@ -23,7 +23,7 @@
 </template>
 
 <script>
-// 引入 api 登陆的index.js
+// 引入 api 登陆的index.js ，解构{}  getAllUserList
 import {login} from '@/api/index.js'
 
 export default {
@@ -60,8 +60,16 @@ export default {
                 message: res.meta.msg,
                 type: 'success'
               })
-              // 路由跳转
+              // 获取token
+              localStorage.setItem('mytoken', res.data.token)
+              // 路由跳转 this.$router.push({name:'路由名'})
               this.$router.push({name: 'Home'})
+
+              // 获取所有数据 -- 在解构函数里写上
+              // getAllUserList({query: '', pagenum: 1, pagesize: 10})
+              //   .then((result) => {
+              //     console.log(result)
+              //   })
             } else {
               this.$message({
                 message: res.meta.msg,
