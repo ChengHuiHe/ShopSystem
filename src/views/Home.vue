@@ -9,15 +9,17 @@
                    background-color="#545c64"
                     text-color="#fff"
                     active-text-color="#ffd04b"
-
+                    :unique-opened='true'
                     :collapse="iscollapse"
+                    :router='true'
                     >
-
+                    <!-- :unique-opened='true' 表示是否只保持一个子菜单的展开 -->
                     <el-submenu index="1" default-active="1">
                         <template slot="title">
                             <i class="el-icon-location"></i>
                             <span>用户管理</span>
                         </template>
+                        <!-- index="XXX" 表示：点击就跳转到 XXX,所以这里放了个路由跳转，注意：必须配合  :router='true' 点击才有效-->
                         <el-menu-item index="user" class="el-icon-menu">用户列表</el-menu-item>
                     </el-submenu>
 
@@ -42,7 +44,7 @@
             </el-aside>
             <el-container>
                 <el-header class="el-header">
-                    <!-- 在样式里设置 :collapse='iscollapse' 才可以实现点击（官网规则）-->
+                    <!-- 在样式里设置 :collapse='iscollapse' 才可以实现点击（官网规则,看 导航菜单）-->
                     <span class="myicon myicon-menu toggle-btn" @click="iscollapse = !iscollapse"></span>
                     <span class="system-title">商品后台管理系统</span>
                     <div>
@@ -51,7 +53,8 @@
                     </div>
                 </el-header>
                 <el-main>
-                    记得占坑 router-view
+                  <!-- 记得占坑 router-view 子组件在这里被渲染 -->
+                    <router-view></router-view>
                 </el-main>
             </el-container>
         </el-container>
