@@ -34,6 +34,13 @@ export const login = (params) => {
 // 获取所有数据 -- 在Vue里 的解构传入
 export const getAllUserList = (pa) => {
   return axios.get('users', {params: pa}).then((res) => {
-    return res
+    return res.data
+  })
+}
+
+// ------------------------- 添加用户 -----------------
+export const addUser = (pa) => {
+  return axios.post('users', pa).then((res) => {
+    return res.data
   })
 }

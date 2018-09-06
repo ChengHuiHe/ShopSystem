@@ -20,25 +20,34 @@ export default new Router({
   // },
 
   routes: [
+    // {
+    //   path: '/',
+    //   name: 'default',
+    //   component: Login
+    // },
+
+    // {
+    //   path: '/user', // 登录成功后直接到子路由 /user 要去掉/ 后面的值
+    //   name: 'user',
+    //   component: User
+    // }
     {
-      path: '/',
-      name: 'default',
-      component: Login
-    },
-    {
-      path: '/login',
       name: 'Login',
+      path: '/login',
       component: Login
     },
     {
-      path: '/home',
       name: 'Home',
-      component: Home
-    },
-    {
-      path: '/user',
-      name: 'user',
-      component: User
+      path: '/',
+      component: Home,
+      children: [
+        { // 子路由
+          name: 'User',
+          path: 'user',
+          component: User
+        }
+      ]
     }
+
   ]
 })
