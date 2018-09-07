@@ -8,8 +8,9 @@
     </el-breadcrumb>
     <!-- 搜索+添加 -->
     <div style="margin-top: 15px;">
-      <el-input placeholder="请输入内容" v-model="searchValue" class="input-with-select" style="width:300px">
-        <el-button slot="append" icon="el-icon-search"></el-button>
+      <!--@keydown.native.enter= 要添加 native，因为native是原生的，其它的为组件方法 -->
+      <el-input placeholder="请输入内容" v-model="serachKey" @keydown.native.enter="searchUserList" class="input-with-select" style="width:300px">
+        <el-button slot="append" icon="el-icon-search" @click="searchUserList"></el-button>
       </el-input>
       <el-button type="success" @click="adddialogTableVisible = true" plain>添加用户</el-button>
     </div>
@@ -26,7 +27,7 @@
         </el-table-column>
         <el-table-column label="状态">
           <template slot-scope="scope">
-            <el-switch v-model="scope.row.mg_state" active-color="#13ce66" inactive-color="#ff4949">
+            <el-switch v-model="scope.row.mg_state" active-color="#13ce66" inactive-color="#ff4949" @change="changeUserStatus(scope.row)">
             </el-switch>
           </template>
         </el-table-column>
@@ -34,7 +35,7 @@
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-tooltip content="编辑" placement="top">
-              <el-button type="success" icon="el-icon-edit" plain @click='edituser(scope.row)'></el-button>
+              <el-button type="success" icon="el-icon-edit" plain @click='showEditDialog(scope.row)'></el-button>
             </el-tooltip>
             <el-tooltip content="删除" placement="top">
               <el-button type="danger" icon="el-icon-delete" plain></el-button>
@@ -71,27 +72,58 @@
 
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="adddialogFormVisible = false">取 消</el-button>
+        <el-button @click="adddialogTableVisible = false">取 消</el-button>
         <el-button type="primary" @click="addUserSubmit('addForm')">确 定</el-button>
       </div>
     </el-dialog>
+    <!-- 点击弹出编辑对话框 -->
+    <el-dialog title="编辑用户" :visible.sync="editdialogTableVisible">
+      <el-form :model="editForm" ref="editForm" :rules="rules" label-width="100px">
 
+        <el-form-item label="用户名" prop="username">
+          <el-input v-model="editForm.username" auto-complete="off" disabled=""></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱:" prop="email">
+          <el-input v-model="editForm.email" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="电话: " prop="mobile">
+          <el-input v-model="editForm.mobile" auto-complete="off"></el-input>
+        </el-form-item>
+
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="editdialogTableVisible = false">取 消</el-button>
+        <el-button type="primary" @click="editUserSubmit('editForm')">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
-import { getAllUserList, addUser } from '@/api/index.js'
+import {
+  getAllUserList,
+  addUser,
+  editUser,
+  updateUserStateById
+} from '@/api/index.js'
 export default {
   data () {
     return {
-      searchValue: '',
+      serachKey: '',
       userList: [],
       pagenum: 1, // 默认
       pagesize: 1, // 默认
       total: 0, // 默认
       adddialogTableVisible: false,
+      editdialogTableVisible: false,
       addForm: {
         username: '',
         password: '',
+        email: '',
+        mobile: ''
+      },
+      editForm: {
+        id: '',
+        username: '',
         email: '',
         mobile: ''
       },
@@ -113,13 +145,73 @@ export default {
     this.initList()
   },
   methods: {
+    // 修改 状态
+    changeUserStatus (row) {
+      updateUserStateById({ id: row.id, state: row.mg_state }).then(res => {
+        if (res.meta.status === 200) {
+          this.$message({
+            message: res.meta.msg,
+            type: 'success'
+          })
+          this.initList()
+        } else {
+          this.$message({
+            message: res.meta.msg,
+            type: 'erreo'
+          })
+        }
+      })
+    },
+
+    // 修改 编辑用户信息
+    editUserSubmit (editForm) {
+      this.$refs[editForm].validate(valid => {
+        if (valid) {
+          editUser(this.editForm).then(res => {
+            console.log(res)
+            // 发送请求
+            if (res.meta.status === 200) {
+              this.$message({
+                type: 'success',
+                message: res.meta.msg
+              })
+              //
+              this.editdialogTableVisible = false
+              this.initList()
+            }
+          })
+        } else {
+          this.$message({
+            type: 'error',
+            message: '大哥输入有问题啊！'
+          })
+        }
+      })
+    },
+
+    // 弹出对话框，同时填充数据
+    showEditDialog (row) {
+      console.log(row)
+      // 可视化
+      this.editdialogTableVisible = true
+      // id
+      this.editForm.id = row.id
+      this.editForm.username = row.username
+      this.editForm.email = row.email
+      this.editForm.mobile = row.mobile
+    },
+    // 搜索
+    searchUserList () {
+      this.initList()
+    },
+
     // 添加用户
     addUserSubmit (addForm) {
       //  官网方法  -- this.$refs[formName].validate((valid) => {}
-      this.$refs[addForm].validate((valid) => {
+      this.$refs[addForm].validate(valid => {
         if (valid) {
           // 添加 用户 promise 对象
-          addUser(this.addForm).then((res) => {
+          addUser(this.addForm).then(res => {
             console.log(res)
             // 发送请求
             if (res.meta.status === 201) {
@@ -144,17 +236,13 @@ export default {
         }
       })
     },
-    // 编辑 用户
-    edituser (row) {
-      console.log(row)
-    },
     // 动态获取数据
     initList () {
       getAllUserList({
-        query: '',
+        query: this.serachKey,
         pagenum: this.pagenum,
         pagesize: this.pagesize
-      }).then((res) => {
+      }).then(res => {
         console.log(res)
         this.userList = res.data.users
         this.total = res.data.total
@@ -170,7 +258,6 @@ export default {
       this.pagenum = val
       this.initList()
     }
-
   }
 }
 </script>

@@ -22,10 +22,12 @@ axios.interceptors.request.use(function (config) {
   return Promise.reject(error)
 })
 
-// 1、登陆 -- 解构 -- promise
+// 1、登陆 -- 解构 -- promise  -- http://www.runoob.com/w3cnote/javascript-promise-object.html
 // export 暴露成员
 export const login = (params) => {
   // axios.post('login', params) promise对象
+  //  promise(reslove,reject) 对象
+  // then中调用的函数本质是 reslove，它会将返回结果返回给promise对象的 reslove函数
   return axios.post('login', params).then((res) => {
     return res.data
   })
@@ -33,7 +35,9 @@ export const login = (params) => {
 
 // 获取所有数据 -- 在Vue里 的解构传入
 export const getAllUserList = (pa) => {
-  return axios.get('users', {params: pa}).then((res) => {
+  return axios.get('users', {
+    params: pa
+  }).then((res) => {
     return res.data
   })
 }
@@ -41,6 +45,39 @@ export const getAllUserList = (pa) => {
 // ------------------------- 添加用户 -----------------
 export const addUser = (pa) => {
   return axios.post('users', pa).then((res) => {
+    return res.data
+  })
+}
+// ------------------------- 编辑用户(看文档) -----------------
+// 请求路径：users/:id
+// 请求方法：put
+// 请求参数
+// 参数名：参数说明备注
+// id用户id不能为空 参数是url参数:id
+// email:邮箱可以为空
+// mobile:手机号可以为空
+
+// vue里面拼接 参数 2种方法:
+// 1、+  。例如：<a:href="'/xxx/' + id">链接</a>
+// 2、使用：`` 号。例如： `users/${pa.id}`
+export const editUser = (pa) => {
+  return axios.put(`users/${pa.id}`, pa).then((res) => {
+    return res.data
+  })
+}
+// ------------------------- 修改用户状态(看文档) -----------------
+// 请求路径：users/:uId/state/:type
+// 请求方法：put
+export const updateUserStateById = (pa) => {
+  return axios.put(`users/${pa.id}/state/${pa.state}`).then((res) => {
+    return res.data
+  })
+}
+
+// ------------------------- 权限列表(看文档) -----------------
+
+export const getAllRightList = (type) => {
+  return axios.get(`rights/${type}`).then(res => {
     return res.data
   })
 }

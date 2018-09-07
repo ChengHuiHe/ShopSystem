@@ -6,6 +6,8 @@ import Login from '../views/Login.vue' // 引入文件
 // 首页
 import Home from '../views/Home.vue'
 import User from '../views/user/User.vue'
+import Right from '../views/right/Right.vue'
+import Role from '../views/right/Role.vue'
 
 Vue.use(Router)
 
@@ -40,12 +42,20 @@ export default new Router({
       name: 'Home',
       path: '/',
       component: Home,
-      children: [
-        { // 子路由
-          name: 'User',
-          path: 'user',
-          component: User
-        }
+      children: [{ // 子路由
+        name: 'User',
+        path: 'user',
+        component: User
+      },
+      {
+        name: 'Right',
+        path: 'right',
+        component: Right
+      }, {
+        name: 'Role',
+        path: 'Role',
+        component: Role
+      }
       ]
     }
 
