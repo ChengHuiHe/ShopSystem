@@ -41,7 +41,7 @@
               <el-button type="danger" icon="el-icon-delete" plain></el-button>
             </el-tooltip>
             <el-tooltip content="授权角色" placement="top">
-              <el-button type="primary" icon="el-icon-share" plain></el-button>
+              <el-button type="primary" icon="el-icon-share" plain @click="showGrantDialog(scope.row)"></el-button>
             </el-tooltip>
           </template>
         </el-table-column>
@@ -96,6 +96,28 @@
         <el-button type="primary" @click="editUserSubmit('editForm')">确 定</el-button>
       </div>
     </el-dialog>
+    <!-- 授权角色对话框 -->
+ <el-dialog title="授权角色" :visible.sync="grantdialogFormVisible">
+      <el-form :model="grantform" ref='grantform' label-width="100px">
+        <el-form-item label="用户名：">
+          <el-input v-model="grantform.username" auto-complete="off" disabled="" style='width:200px'></el-input>
+        </el-form-item>
+        <el-form-item label="角色：级联">
+          <template>
+            <!-- v-model:这可以自动的获取:value所绑定的数据，意味着rolevalue就是item.id -->
+            <el-select v-model="grantform.rid" placeholder="请选择">
+              <el-option v-for="item in roleList" :key="item.id" :label="item.roleName" :value="item.id">
+              </el-option>
+            </el-select>
+          </template>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="grantdialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="grantUserSubmit">确 定</el-button>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 <script>
@@ -103,7 +125,8 @@ import {
   getAllUserList,
   addUser,
   editUser,
-  updateUserStateById
+  updateUserStateById,
+  getAllRoleList
 } from '@/api/index.js'
 export default {
   data () {
@@ -115,6 +138,7 @@ export default {
       total: 0, // 默认
       adddialogTableVisible: false,
       editdialogTableVisible: false,
+      grantdialogFormVisible: false,
       addForm: {
         username: '',
         password: '',
@@ -138,13 +162,33 @@ export default {
           { type: 'email', message: '请输入正确的邮箱', trigger: 'blur' }
         ],
         mobile: [{ required: true, message: '请输入电话' }]
-      }
+      },
+      // 授权给用户的参数
+      grantform: {
+        id: '',
+        rid: '',
+        username: ''
+      },
+      roleList: []
     }
   },
   mounted () {
     this.initList()
   },
   methods: {
+    // 实现授权给用户
+    grantUserSubmit () {
+
+    },
+    // 角色权限
+    showGrantDialog (row) {
+      // 添加用户角色表
+      getAllRoleList().then(res => {
+        console.log(res)
+        this.roleList = res.data
+      })
+    },
+
     // 修改 状态
     changeUserStatus (row) {
       updateUserStateById({ id: row.id, state: row.mg_state }).then(res => {

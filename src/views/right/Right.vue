@@ -10,7 +10,7 @@
         <!-- 表格 -->
         <template>
             <el-table :data="rightList" style="width: 100%">
-                 <el-table-column property='id' label="id" width="180">
+                <el-table-column property='id' label="id" width="180">
 
                 </el-table-column>
                 <el-table-column property='authName' label="权限" width="180">
@@ -20,9 +20,9 @@
 
                 </el-table-column>
                 <el-table-column property='' label="层级">
-                      <template slot-scope="scope">
-                          <!-- 局部过滤 -->
-                          <span>{{scope.row.level | levelFormat}}</span>
+                    <template slot-scope="scope">
+                        <!-- 局部过滤 -->
+                        <span>{{scope.row.level | levelFormat}}</span>
                     </template>
                 </el-table-column>
             </el-table>
@@ -61,5 +61,12 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-
+.el-breadcrumb {
+  background-color: #f5f5f5;
+  height: 45px;
+  font-size: 15px;
+  padding-left: 10px;
+  line-height: 45px;
+  margin-bottom: 15px;
+}
 </style>

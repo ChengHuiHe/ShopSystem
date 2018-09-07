@@ -74,10 +74,27 @@ export const updateUserStateById = (pa) => {
   })
 }
 
-// ------------------------- 权限列表(看文档) -----------------
+// ------------------------- “权限”列表(看文档) -----------------
 
 export const getAllRightList = (type) => {
   return axios.get(`rights/${type}`).then(res => {
+    return res.data
+  })
+}
+
+// ------------------------- 获取所有“角色权限列表”数据 -----------------
+
+export const getAllRoleList = () => {
+  return axios.get('roles').then((res) => {
+    return res.data
+  })
+}
+
+// ------------------删除角色指定权限 -------------------
+// 请求路径：roles/:roleId/rights/:rightId
+// 请求方法：delete
+export const getDeleteRole = (roleId, rightId) => {
+  return axios.delete(`roles/${roleId}/rights/${rightId}`).then(res => {
     return res.data
   })
 }
