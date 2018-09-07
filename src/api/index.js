@@ -74,8 +74,11 @@ export const updateUserStateById = (pa) => {
   })
 }
 
-// ------------------------- “权限”列表(看文档) -----------------
+// ----------------------------角色列表 和 权限列表的分割线--------------------------------------
 
+// ------------------------- “权限”列表(看文档) -----------------
+// 请求路径：rights/:type
+// 请求方法：get
 export const getAllRightList = (type) => {
   return axios.get(`rights/${type}`).then(res => {
     return res.data
@@ -83,7 +86,11 @@ export const getAllRightList = (type) => {
 }
 
 // ------------------------- 获取所有“角色权限列表”数据 -----------------
-
+// 请求路径：roles
+// 请求方法：get
+// 响应数据说明
+// 第一层为角色信息
+// 第二层开始为权限说明，权限一共有3层权限
 export const getAllRoleList = () => {
   return axios.get('roles').then((res) => {
     return res.data
@@ -98,3 +105,16 @@ export const getDeleteRole = (roleId, rightId) => {
     return res.data
   })
 }
+
+// -------------------- 给指定的角色授权 ---------------------
+// 请求路径：roles/:roleId/rights
+// 请求方法：post
+export const grantroleright = (pa) => {
+  return axios.post(`roles/${pa.roleId}/rights`, {rids: pa.rids}).then(res => {
+    return res.data
+  })
+}
+
+// ------------------------ 编辑提交角色 -----------------------
+// 请求路径：roles/:id
+// 请求方法：put
