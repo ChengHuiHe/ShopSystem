@@ -141,7 +141,7 @@ export default {
   methods: {
     // 显示 添加角色对话框
     showdialogRoleFormVisible () {
-      this.grantDialogVisible = true
+      this.addRoleDialogVisible = true
     },
     // 添加角色
     addRoleSubmit () {

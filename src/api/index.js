@@ -73,6 +73,17 @@ export const updateUserStateById = (pa) => {
     return res.data
   })
 }
+// --------------------. 分配用户角色(主管、员工、hr、会计等) ----------------------
+// 请求路径：users/:id/role
+// 请求方法：put
+// 请求参数
+// id用户ID不能为空参数是url参数:id
+// rid角色id不能为空参数body参数
+export const grantRoleById = (pa) => {
+  return axios.put(`users/${pa.id}/role`, {rid: pa.rid}).then(res => {
+    return res.data
+  })
+}
 
 // ----------------------------角色列表 和 权限列表的分割线--------------------------------------
 

@@ -126,13 +126,22 @@ import {
   addUser,
   editUser,
   updateUserStateById,
-  getAllRoleList
+  getAllRoleList,
+  grantRoleById
 } from '@/api/index.js'
 export default {
   data () {
     return {
       serachKey: '',
       userList: [],
+      // 授权给对应角色需要的参数（看文档必须的参数是id、rid）
+      grantform: {
+        id: '',
+        role_id: '',
+        username: '',
+        mobile: '',
+        email: ''
+      },
       pagenum: 1, // 默认
       pagesize: 1, // 默认
       total: 0, // 默认
@@ -163,12 +172,6 @@ export default {
         ],
         mobile: [{ required: true, message: '请输入电话' }]
       },
-      // 授权给用户的参数
-      grantform: {
-        id: '',
-        rid: '',
-        username: ''
-      },
       roleList: []
     }
   },
@@ -178,13 +181,37 @@ export default {
   methods: {
     // 实现授权给用户
     grantUserSubmit () {
-
-    },
-    // 角色权限
-    showGrantDialog (row) {
-      // 添加用户角色表
-      getAllRoleList().then(res => {
+      grantRoleById(this.grantform).then(res => {
         console.log(res)
+        console.log('..........给用户授权...........')
+
+        if (res.meta.status === 200) {
+          this.$message({
+            type: 'success',
+            message: res.meta.msg
+          })
+        } else {
+          this.$message({
+            type: 'error',
+            message: res.meta.msg
+          })
+        }
+
+        // 隐藏
+        this.grantdialogFormVisible = false
+      })
+    },
+    // 显示授权角色对话框
+    showGrantDialog (row) {
+      // 弹出提示框
+      this.grantdialogFormVisible = true
+      // 默认填充
+      this.grantform.id = row.id
+      this.grantform.username = row.id
+
+      // 加载角色列表数据
+      getAllRoleList().then(res => {
+        // console.log(res)
         this.roleList = res.data
       })
     },
