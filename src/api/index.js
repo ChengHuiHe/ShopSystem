@@ -110,7 +110,8 @@ export const getDeleteRole = (roleId, rightId) => {
 // 请求路径：roles/:roleId/rights
 // 请求方法：post
 export const grantroleright = (pa) => {
-  return axios.post(`roles/${pa.roleId}/rights`, {rids: pa.rids}).then(res => {
+  // 注意：这里的 roleid 要和rose里的保持一致
+  return axios.post(`roles/${pa.roleid}/rights`, {rids: pa.rids}).then(res => {
     return res.data
   })
 }
@@ -118,3 +119,11 @@ export const grantroleright = (pa) => {
 // ------------------------ 编辑提交角色 -----------------------
 // 请求路径：roles/:id
 // 请求方法：put
+
+// --------------------- 添加角色 Role ---------------------------
+export const addRole = (pa) => {
+  // pa 是一个对象
+  return axios.post('roles', pa).then(res => {
+    return res.data
+  })
+}
