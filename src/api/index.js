@@ -121,9 +121,20 @@ export const grantroleright = (pa) => {
 // 请求方法：put
 
 // --------------------- 添加角色 Role ---------------------------
+// 请求路径：roles
+// 请求方法：post
 export const addRole = (pa) => {
   // pa 是一个对象
   return axios.post('roles', pa).then(res => {
+    return res.data
+  })
+}
+
+// ----------------------- . 左侧菜单权限 -------------
+// 请求路径：menus
+// 请求方法：get
+export const getLeftMenu = () => {
+  return axios.get('menus').then(res => {
     return res.data
   })
 }

@@ -44,17 +44,27 @@ export default new Router({
       component: Home,
       children: [{ // 子路由
         name: 'User',
-        path: 'user',
+        path: 'users',
         component: User
       },
       {
         name: 'Right',
-        path: 'right',
+        path: 'rights',
         component: Right
       }, {
         name: 'Role',
-        path: 'Role',
+        path: 'roles',
         component: Role
+      },
+      {
+        name: 'Goods',
+        path: 'goods'
+        // component: Good
+      },
+      {
+        name: 'Categorie',
+        path: 'categories'
+        // component:Categorie
       }
       ]
     }

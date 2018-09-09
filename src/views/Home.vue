@@ -3,35 +3,28 @@
     <el-container>
       <el-aside width="auto">
         <div class="logo"></div>
-        <el-menu class="el-menu-admin" @open="handleOpen" @close="handleClose" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" :unique-opened='true' :collapse="iscollapse" :router='true'>
+        <el-menu class="el-menu-admin"
+         @open="handleOpen"
+         @close="handleClose"
+         background-color="#545c64"
+         text-color="#fff"
+         active-text-color="#ffd04b"
+         :unique-opened='true'
+         :collapse="iscollapse"
+         :router='true'>
           <!-- :unique-opened='true' 表示是否只保持一个子菜单的展开 -->
           <!-- index="XXX" 表示：点击就跳转到 XXX,所以这里放了个路由跳转，注意：必须配合  :router='true' 点击才有效-->
 
-          <el-submenu index="1">
+          <!-- :index,变成动态绑定，2、给动态绑定后面添加 +'',表示变成字符串（数字+字符串=> 字符串） -->
+          <el-submenu :index="item.id + ''" v-for="item in menuList" :key="item.id">
             <template slot="title">
               <i class="el-icon-location"></i>
-              <span>用户管理</span>
+              <span>{{item.authName}}</span>
             </template>
-            <el-menu-item index="user">
+            <el-menu-item :index="subItem.path" v-for="subItem in item.children" :key="subItem.id">
               <i class="el-icon-menu"></i>
-              <span slot="title">用户列表</span>
+              <span slot="title">{{subItem.authName}}</span>
             </el-menu-item>
-          </el-submenu>
-
-           <el-submenu index="2">
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span>权限管理</span>
-            </template>
-            <el-menu-item index="right">
-              <i class="el-icon-menu"></i>
-              <span slot="title">权限列表</span>
-            </el-menu-item>
-            <el-menu-item index="role">
-              <i class="el-icon-menu"></i>
-              <span slot="title">角色列表</span>
-            </el-menu-item>
-
           </el-submenu>
 
         </el-menu>
@@ -57,10 +50,12 @@
 </template>
 
 <script>
+import {getLeftMenu} from '@/api/index.js'
 export default {
   data () {
     return {
-      iscollapse: false
+      iscollapse: false,
+      menuList: []
     }
   },
   methods: {
@@ -77,6 +72,15 @@ export default {
       // 重定向(vue)
       this.$router.push({ name: 'Login' })
     }
+  },
+  mounted () {
+    // 获取左边的菜单 --- 获取成功后，到路由动态修改
+    getLeftMenu().then(res => {
+      console.log('左侧菜单' + res.data)// 这样输出的结果是object 的（因为是字符串+结果=>字符串对象）
+      console.log(res.data)
+      console.log('------------------------------------')
+      this.menuList = res.data
+    })
   }
 }
 </script>
