@@ -9,6 +9,8 @@ import './styles/index.scss' // 添加样式(要下载包npm install less less-l
 // 快速上手
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+// 引入
+import store from '@/store/store.js'
 Vue.use(ElementUI)
 
 Vue.config.productionTip = false
@@ -34,6 +36,7 @@ router.beforeEach((to, from, next) => {
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })

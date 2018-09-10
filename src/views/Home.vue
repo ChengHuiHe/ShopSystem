@@ -36,7 +36,7 @@
           <span class="myicon myicon-menu toggle-btn" @click="iscollapse = !iscollapse"></span>
           <span class="system-title">商品后台管理系统</span>
           <div>
-            <span class="welcome">你好！admin</span>
+            <span class="welcome">你好！{{$store.getters.getUserName}}</span>
             <el-button type="text" @click="loginOut">退出</el-button>
           </div>
         </el-header>
@@ -76,7 +76,7 @@ export default {
   mounted () {
     // 获取左边的菜单 --- 获取成功后，到路由动态修改
     getLeftMenu().then(res => {
-      console.log('左侧菜单' + res.data)// 这样输出的结果是object 的（因为是字符串+结果=>字符串对象）
+      // console.log('左侧菜单左侧菜单' + res.data)// 这样输出的结果是object 的（因为是字符串+结果=>字符串对象）
       console.log(res.data)
       console.log('------------------------------------')
       this.menuList = res.data

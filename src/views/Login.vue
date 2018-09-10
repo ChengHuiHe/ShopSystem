@@ -1,4 +1,3 @@
-
 <template>
 
  <div class="login">
@@ -61,6 +60,9 @@ export default {
                 message: res.meta.msg,
                 type: 'success'
               })
+
+              // 通过 action 触发 mutation中的函数
+              this.$store.dispatch('setUserNameAction', res.data.username + 'aa')
               // 获取 -- 设置token
               localStorage.setItem('mytoken', res.data.token)
               // 路由跳转 this.$router.push({name:'路由名'})
