@@ -21,6 +21,52 @@ axios.interceptors.request.use(function (config) {
   // Do something with request error:请求失败
   return Promise.reject(error)
 })
+// ----------------------- axios 使用----------------------
+// get:
+// 向具有指定ID的用户发出请求
+// axios.get('/user?ID=12345')
+//   .then(function (response) {
+//     console.log(response);
+//   })
+//   .catch(function (error) {
+//     console.log(error);
+//   });
+// 也可以通过 params 对象传递参数
+// axios.get('/user', {
+//   params: {
+//     ID: 12345
+//   }
+// })
+// .then(function (response) {
+//   console.log(response);
+// })
+// .catch(function (error) {
+//   console.log(error);
+// });
+
+// -----------------------post ----------------------
+// axios.post('/user', {
+//   firstName: 'Fred',
+//   lastName: 'Flintstone'
+// })
+// .then(function (response) {
+//   console.log(response);
+// })
+// .catch(function (error) {
+//   console.log(error);
+// });
+// --------------------- 过个并发 请求 --------------------
+// function getUserAccount () {
+//   return axios.get('/user/12345')
+// }
+// function getUserPermissions () {
+//   return axios.get('/user/12345/permissions')
+// }
+// axios.all([getUserAccount(), getUserPermissions()])
+//   .then(axios.spread(function (acct, perms) {
+//     // 两个请求现已完成
+//   }))
+// --------------------------------------------------------
 
 // 1、登陆 -- 解构 -- promise  -- http://www.runoob.com/w3cnote/javascript-promise-object.html
 // export 暴露成员
@@ -146,6 +192,18 @@ export const addRole = (pa) => {
 // 请求方法：get
 export const getLeftMenu = () => {
   return axios.get('menus').then(res => {
+    return res.data
+  })
+}
+
+// ----------------- 获取商品分类的 数据 category.vue----------------
+// 商品数据列表
+// 请求路径：categories
+// 请求方法：get
+// 请求参数
+// type[1,2,3]值：1，2，3分别表示显示一层二层三层分类列表
+export const getCategories = (type) => {
+  return axios.get(`categories`, {params: {'type': type}}).then(res => {
     return res.data
   })
 }

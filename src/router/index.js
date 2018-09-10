@@ -9,6 +9,10 @@ import User from '../views/user/User.vue'
 import Right from '../views/right/Right.vue'
 import Role from '../views/right/Role.vue'
 
+import Categorie from '../views/goods/Categories.vue'
+import Goods from '../views/goods/Goods.vue'
+import Params from '../views/goods/Params.vue'
+
 Vue.use(Router)
 
 export default new Router({
@@ -58,13 +62,18 @@ export default new Router({
       },
       {
         name: 'Goods',
-        path: 'goods'
-        // component: Good
+        path: 'goods',
+        component: Goods
       },
       {
         name: 'Categorie',
-        path: 'categories'
-        // component:Categorie
+        path: 'categories',
+        component: Categorie
+      },
+      {
+        name: 'Params',
+        path: 'params',
+        component: Params
       }
       ]
     }
