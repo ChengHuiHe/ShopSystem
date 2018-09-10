@@ -28,7 +28,7 @@
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="adddialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+                <el-button type="primary" @click="addCategorySubmit">确 定</el-button>
             </div>
         </el-dialog>
 
@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import {getCategories} from '@/api/index.js'
+import {getCategories, addCategory} from '@/api/index.js'
 // 引入公共部分 --- 但是官网的是 tree-grid,所以 要自定component 该回来
 import TreeGrid from '@/components/TreeGrid/TreeGrid.vue'
 export default {
@@ -45,7 +45,7 @@ export default {
       adddialogFormVisible: false,
       dataSource: [],
       addform: {
-        cat_id: '',
+        cat_pid: '',
         cat_name: '',
         cat_level: ''
       },
@@ -73,6 +73,40 @@ export default {
     }
   },
   methods: {
+    //  加载 商品分类数据
+    initList () {
+      // 3表示显示3级数据
+      getCategories(3).then(res => {
+        console.log(res)
+        this.dataSource = res.data
+      })
+    },
+    // 实现商品分类的添加
+    addCategorySubmit () {
+      if (this.selectedOptions.length === 0) {
+        this.addform.cat_level = 0
+        this.addform.cat_pid = 0
+      } else if (this.selectedOptions.length === 1) {
+        this.addform.cat_level = 1
+        this.addform.cat_pid = this.selectedOptions[0]
+      } else {
+        this.addform.cat_level = 2
+        this.addform.cat_pid = this.selectedOptions[2]
+      }
+      console.log(this.addform)
+      addCategory(this.addform).then(res => {
+        if (res.data.status === 201) {
+          this.$message({
+            type: 'success',
+            message: res.meta.msg
+          })
+          getCategories(2).then(res => {
+            this.dataSource = res.data
+          })
+          this.adddialogFormVisible = false
+        }
+      })
+    },
     // 当级联选择发生变化的时候触发
     handleChange () {},
     //   显示添加角色对话框
@@ -94,10 +128,7 @@ export default {
   },
   mounted () {
     //  加载 商品分类数据
-    getCategories(3).then(res => {
-      console.log(res)
-      this.dataSource = res.data
-    })
+    this.initList()
   },
   // 通过components属性可以来注入你想使用的组件
   components: {

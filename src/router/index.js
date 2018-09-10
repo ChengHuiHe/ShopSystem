@@ -12,6 +12,8 @@ import Role from '../views/right/Role.vue'
 import Categorie from '../views/goods/Categories.vue'
 import Goods from '../views/goods/Goods.vue'
 import Params from '../views/goods/Params.vue'
+import Add from '../views/goods/GoodsAdd.vue'
+import List from '../views/goods/GoodsList.vue'
 
 Vue.use(Router)
 
@@ -46,35 +48,49 @@ export default new Router({
       name: 'Home',
       path: '/',
       component: Home,
-      children: [{ // 子路由
-        name: 'User',
-        path: 'users',
-        component: User
-      },
-      {
-        name: 'Right',
-        path: 'rights',
-        component: Right
-      }, {
-        name: 'Role',
-        path: 'roles',
-        component: Role
-      },
-      {
-        name: 'Goods',
-        path: 'goods',
-        component: Goods
-      },
-      {
-        name: 'Categorie',
-        path: 'categories',
-        component: Categorie
-      },
-      {
-        name: 'Params',
-        path: 'params',
-        component: Params
-      }
+      children: [
+        { // 子路由
+          name: 'User',
+          path: 'users',
+          component: User
+        },
+        {
+          name: 'Right',
+          path: 'rights',
+          component: Right
+        }, {
+          name: 'Role',
+          path: 'roles',
+          component: Role
+        },
+        {
+          name: 'Goods',
+          path: 'goods',
+          component: Goods,
+          // 子路由（嵌套）
+          redirect: {path: 'goods/list'},
+          children: [
+            {
+              name: 'List',
+              path: 'list',
+              component: List
+            }, {
+              name: 'Add',
+              path: 'add',
+              component: Add
+            }
+          ]
+        },
+        {
+          name: 'Categorie',
+          path: 'categories',
+          component: Categorie
+        },
+        {
+          name: 'Params',
+          path: 'params',
+          component: Params
+        }
       ]
     }
 

@@ -207,3 +207,16 @@ export const getCategories = (type) => {
     return res.data
   })
 }
+
+// ---------------------- 添加商品分类 ---------------------------------------
+// 请求路径：categories
+// 请求方法：post
+// 请求参数
+// cat_pid分类父ID不能为空
+// cat_name分类名称不能为空
+// cat_level分类层级不能为空
+export const addCategory = (pa) => {
+  return axios.post('categories', pa).then((res) => {
+    return res.data
+  })
+}
